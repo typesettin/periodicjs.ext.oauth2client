@@ -7,7 +7,7 @@ var Extensions = require('periodicjs.core.extensions'),
 
 ExtensionCore.install({
 		// enabled:false,
-		moveafter:'periodicjs.ext.login'
+		// moveafter:'periodicjs.ext.login'
 	},
 	function(err,status){
 		if(err){
