@@ -49,17 +49,18 @@ var use_oauth_client = function(){
 					$or:[]
 				};
 
-				findsocialaccountquery[`attributes.oauth2client_${oauth2client_settings.service_name}_user_id`] = oauth2clientdata.id;
-
-				socialaccountattributes[`oauth2client_${oauth2client_settings.service_name}_user_id`] = oauth2clientdata.id;
-				socialaccountattributes[`oauth2client_${oauth2client_settings.service_name}_username`] = oauth2clientdata.username;
-				socialaccountattributes[`oauth2client_${oauth2client_settings.service_name}_accesstoken`] = accessTokenToSave;
-				socialaccountattributes[`oauth2client_${oauth2client_settings.service_name}_refreshtoken`] = refreshToken;
-				socialaccountattributes[`oauth2client_${oauth2client_settings.service_name}_accesstokenupdated`] = new Date();
+				findsocialaccountquery[`attributes.oauth2client_${oauth2client_settings.service_name}.user_id`] = oauth2clientdata.id;
+				socialaccountattributes[`oauth2client_${oauth2client_settings.service_name}`] = {
+					user_id : oauth2clientdata.id,
+					username : oauth2clientdata.username,
+					accesstoken: accessTokenToSave,
+					refreshtoken : refreshToken,
+					accesstokenupdated : new Date()
+				};
 
 				exitinguserquery.$or.push({email: oauth2clientdata.email});
 				var exitinguserquery_userid_query = {};
-				exitinguserquery_userid_query[`oauth2client_${oauth2client_settings.service_name}_user_id`] = oauth2clientdata.id;
+				exitinguserquery_userid_query[`oauth2client_${oauth2client_settings.service_name}.user_id`] = oauth2clientdata.id;
 				exitinguserquery.$or.push(exitinguserquery_userid_query);
 				authenticateUser({
 					exitinguserquery:exitinguserquery,
@@ -72,8 +73,6 @@ var use_oauth_client = function(){
 						});
 					},
 					nonusercallback: function () {
-						
-
 						linkSocialAccount({
 							donecallback: done,
 							linkaccountservice: `oauth2client-${oauth2client_settings.service_name}`,
