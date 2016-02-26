@@ -164,6 +164,13 @@ var user_auth_request = function(options){
 	};
 };
 
+var get_auth_tokens = function(){
+	return {
+		users: selectedUserAuthToken,
+		clients: clientAuthToken
+	};
+};
+
 /**
  * oauth2client login controller
  * @module oauthController
@@ -194,7 +201,8 @@ var controller = function (resources) {
 	return {
 		oauth2callback:oauth2callback,
 		client_auth_request: client_auth_request,
-		user_auth_request: user_auth_request
+		user_auth_request: user_auth_request,
+		get_auth_tokens: get_auth_tokens
 	};
 };
 
