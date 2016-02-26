@@ -35,6 +35,8 @@ module.exports = function (periodic) {
 
 
 	if (loginExtSettings && loginExtSettings.passport && loginExtSettings.passport.oauth.oauth2client && Array.isArray(loginExtSettings.passport.oauth.oauth2client) && loginExtSettings.passport.oauth.oauth2client.length>0) {
+		periodic.app.controller.extension.oauth2client.client_auth_request={};
+		periodic.app.controller.extension.oauth2client.user_auth_request={};
 		adminExtMenu ={
 	    "tree-item": "folder",
 	    "tree-item-label": "OAUTH2 Logins",
@@ -60,6 +62,8 @@ module.exports = function (periodic) {
 
 		//social controller & router
 		loginExtSettings.passport.oauth.oauth2client.forEach(function(oauth2client_settings){
+			periodic.app.controller.extension.oauth2client.client_auth_request[oauth2client_settings.service_name] = oauthController.client_auth_request({client:oauth2client_settings});
+			periodic.app.controller.extension.oauth2client.user_auth_request[oauth2client_settings.service_name] = oauthController.user_auth_request({client:oauth2client_settings});
 			authRouter.get(`/oauth2client-${oauth2client_settings.service_name}`, passport.authenticate(`oauth2client-${oauth2client_settings.service_name}`));
 			authRouter.get(`/oauth2client-${oauth2client_settings.service_name}/callback`, oauthController.oauth2callback({service_name:oauth2client_settings.service_name}));
 			adminExtMenu["tree-item-folder-contents"].push({

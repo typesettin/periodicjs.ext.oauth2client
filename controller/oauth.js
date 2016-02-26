@@ -2,6 +2,7 @@
 
 var OAuth2Strategy = require('passport-oauth2').Strategy,
 	merge = require('utils-merge'),
+	capitalize = require('capitalize'),
 	// path = require('path'),
 	// CoreUtilities,
 	// CoreController,
@@ -13,7 +14,9 @@ var OAuth2Strategy = require('passport-oauth2').Strategy,
 	loginExtSettings,
 	linkSocialAccount,
 	authenticateUser,
-	passportController;
+	passportController,
+	selectedUserAuthToken ={},
+	clientAuthToken={};
 
 /**
  * sets a name spaced passport authentication strategy based on the service name in the array of oauth clients, if the user exists, it will link the account, if the user is signed in, it will associate accounts, if the user doesnt exist it will recreate a new account
@@ -115,6 +118,53 @@ var oauth2callback = function(options){
 }; 
 
 /**
+ * set controller data auth header, for making authenticated API requests later
+ * @param  {object} options	pass the client configuration from the login extension settings
+ * @return {Function} returns the express middleware for the oauth callback
+ */
+var client_auth_request = function(options){
+	return function(req, res, next){
+		if(!clientAuthToken[options.client.service_name]){
+			clientAuthToken[options.client.service_name] = new Buffer(options.client.client_token_id + ':' + options.client.client_secret).toString('base64');
+		}
+		req.controllerData = req.controllerData || {};
+		req.controllerData.authorization_header = 'Basic ' + clientAuthToken[options.client.service_name];
+		next();
+	};
+};
+
+
+/**
+ * set controller data auth header, for making authenticated API requests later
+ * @param  {object} options	pass the client configuration from the login extension settings
+ * @return {Function} returns the express middleware for the oauth callback
+ */
+var user_auth_request = function(options){
+	return function(req, res, next){
+		req.controllerData = req.controllerData || {};
+		if(!options.client.user_email){
+			next();
+		}
+		else if(selectedUserAuthToken[options.client.service_name]){
+			req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[options.client.service_name].attributes[`oauth2client_${options.client.service_name}`].accesstoken;
+			next();
+		}
+		else{
+			var UserModelToQuery,
+				userModelToUse = options.client.user_entity_type || 'user';
+			UserModelToQuery = mongoose.model(capitalize(userModelToUse));
+		  UserModelToQuery.findOne({ email: options.client.user_email }, function (err, user) {
+		    selectedUserAuthToken[options.client.service_name] = user;
+		    if(user){
+			    req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[options.client.service_name].attributes[`oauth2client_${options.client.service_name}`].accesstoken;
+		    }
+				next();
+		  });
+		}
+	};
+};
+
+/**
  * oauth2client login controller
  * @module oauthController
  * @{@link https://github.com/typesettin/periodic}
@@ -141,9 +191,10 @@ var controller = function (resources) {
 	linkSocialAccount = passportController.linkSocialAccount;
 
 	use_oauth_client();
-
 	return {
-		oauth2callback:oauth2callback
+		oauth2callback:oauth2callback,
+		client_auth_request: client_auth_request,
+		user_auth_request: user_auth_request
 	};
 };
 
