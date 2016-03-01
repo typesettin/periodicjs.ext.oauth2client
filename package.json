@@ -43,9 +43,15 @@
     "uglify-js": "^2.4.15",
     "uglifyify": "^3.0.1"
   },
+  "directories": {},
+  "dist": {
+    "shasum": "689ccbc1027f45b7da9ee717c311ef038f6c78b8",
+    "tarball": "http://registry.npmjs.org/periodicjs.ext.oauth2client/-/periodicjs.ext.oauth2client-1.4.0.tgz"
+  },
   "engines": {
     "node": ">=4.2.x"
   },
+  "gitHead": "fc6076a3d1dd39e5061aaf9d64fb4250b5df05cf",
   "homepage": "https://github.com/typesettin/periodicjs.ext.oauth2client",
   "keywords": [
     "authentication",
@@ -58,15 +64,19 @@
   "main": "index.js",
   "maintainers": [
     {
-      "email": "janbialostok@gmail.com",
-      "name": "janbialostok"
+      "email": "yaw.etse@gmail.com",
+      "name": "Yaw Joseph Etse",
+      "url": "http://about.me/yawjosephetse"
     },
     {
-      "email": "yaw.etse@gmail.com",
-      "name": "yawetse"
+      "email": "jan@promisefin.com",
+      "name": "Jan Bialostok",
+      "url": "https://github.com/janbialostok"
     }
   ],
   "name": "periodicjs.ext.oauth2client",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git://github.com/typesettin/periodicjs.ext.oauth2client.git"
@@ -76,5 +86,5 @@
     "postuninstall": "node uninstall.js",
     "test": "mocha"
   },
-  "version": "1.4.0"
+  "version": "1.4.1"
 }

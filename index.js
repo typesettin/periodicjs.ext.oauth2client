@@ -70,7 +70,7 @@ module.exports = function (periodic) {
 	      "tree-item": "file",
 	      "tree-item-label": `${oauth2client_settings.service_name} login`,
 	      "tree-item-id": `asyncadmin.extensions.oauth2client.${oauth2client_settings.service_name}`,
-	      "tree-item-link": "/"+periodic.app.locals.adminPath+"/auth/oauth2client-"+oauth2client_settings.service_name,
+	      "tree-item-link": "/auth/oauth2client-"+oauth2client_settings.service_name,
 	      "tree-item-attributes": {
 	        // "class": "async-admin-ajax-link",
 	        "title": `${oauth2client_settings.service_name} login`,

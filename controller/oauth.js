@@ -145,7 +145,10 @@ var user_auth_request = function(options){
 		if(!options.client.user_email){
 			next();
 		}
-		else if(selectedUserAuthToken[options.client.service_name]){
+		else if(selectedUserAuthToken[options.client.service_name] && 
+			selectedUserAuthToken[options.client.service_name].attributes && 
+			selectedUserAuthToken[options.client.service_name].attributes[`oauth2client_${options.client.service_name}`] && 
+			selectedUserAuthToken[options.client.service_name].attributes[`oauth2client_${options.client.service_name}`].accesstoken){
 			req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[options.client.service_name].attributes[`oauth2client_${options.client.service_name}`].accesstoken;
 			next();
 		}
