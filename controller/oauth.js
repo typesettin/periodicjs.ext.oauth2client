@@ -109,6 +109,7 @@ var oauth2callback = function(options){
 		// console.log('req.headers',req.headers)
 		var loginUrl = (req.session.return_url) ? req.session.return_url : loginExtSettings.settings.authLoggedInHomepage;
 		var loginFailureUrl = (req.session.return_url) ? req.session.return_url : loginExtSettings.settings.authLoginPath + '?return_url=' + req.session.return_url;
+		// console.log({ loginUrl, loginFailureUrl },'req.session',req.session);
 		passport.authenticate(`oauth2client-${options.service_name}`, {
 			successRedirect: loginUrl,
 			failureRedirect: loginFailureUrl,
@@ -202,10 +203,10 @@ var controller = function (resources) {
 
 	use_oauth_client();
 	return {
-		oauth2callback:oauth2callback,
-		client_auth_request: client_auth_request,
-		user_auth_request: user_auth_request,
-		get_auth_tokens: get_auth_tokens
+		oauth2callback,
+		client_auth_request,
+		user_auth_request,
+		get_auth_tokens,
 	};
 };
 

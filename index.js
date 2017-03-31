@@ -33,7 +33,6 @@ module.exports = function (periodic) {
 		adminExtMenu,
 		oauthController = periodic.app.controller.extension.oauth2client.oauth;
 
-
 	if (loginExtSettings && loginExtSettings.passport && loginExtSettings.passport.oauth.oauth2client && Array.isArray(loginExtSettings.passport.oauth.oauth2client) && loginExtSettings.passport.oauth.oauth2client.length>0) {
 		periodic.app.controller.extension.oauth2client.client_auth_request={};
 		periodic.app.controller.extension.oauth2client.user_auth_request={};

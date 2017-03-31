@@ -45,8 +45,8 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "689ccbc1027f45b7da9ee717c311ef038f6c78b8",
-    "tarball": "http://registry.npmjs.org/periodicjs.ext.oauth2client/-/periodicjs.ext.oauth2client-1.4.0.tgz"
+    "shasum": "cf87aa01d6a18c12693a5a8b92cee209b951e6ba",
+    "tarball": "https://registry.npmjs.org/periodicjs.ext.oauth2client/-/periodicjs.ext.oauth2client-1.4.1.tgz"
   },
   "engines": {
     "node": ">=4.2.x"
@@ -64,14 +64,12 @@
   "main": "index.js",
   "maintainers": [
     {
-      "email": "yaw.etse@gmail.com",
-      "name": "Yaw Joseph Etse",
-      "url": "http://about.me/yawjosephetse"
+      "name": "janbialostok",
+      "email": "janbialostok@gmail.com"
     },
     {
-      "email": "jan@promisefin.com",
-      "name": "Jan Bialostok",
-      "url": "https://github.com/janbialostok"
+      "name": "yawetse",
+      "email": "yaw.etse@gmail.com"
     }
   ],
   "name": "periodicjs.ext.oauth2client",
@@ -86,5 +84,5 @@
     "postuninstall": "node uninstall.js",
     "test": "mocha"
   },
-  "version": "1.4.1"
+  "version": "2.0.0"
 }
