@@ -9,47 +9,41 @@ const capitalize = require('capitalize');
 
 module.exports = (periodic) => {
   let loginExtSettings = periodic.app.controller.extension.login.loginExtSettings;
-  let clients = (loginExtSettings && loginExtSettings.passport && loginExtSettings.passport.oauth && loginExtSettings.passport.oauth.oauth2client && Array.isArray(loginExtSettings.passport.oauth.oauth2client) && loginExtSettings.passport.oauth.oauth2client.length > 0)
-    ? loginExtSettings.passport.oauth.oauth2client
-    : [];
+  let clients = (loginExtSettings && loginExtSettings.passport && loginExtSettings.passport.oauth && loginExtSettings.passport.oauth.oauth2client && Array.isArray(loginExtSettings.passport.oauth.oauth2client) && loginExtSettings.passport.oauth.oauth2client.length > 0) ?
+    loginExtSettings.passport.oauth.oauth2client :
+    [];
   let reactadmin = periodic.app.controller.extension.reactadmin;
   if (clients.length) {
     clients = clients.map(client => {
       return {
-        "component": "li",
-        children: [
-          {
-            "component": "a",
-            "props": {
-              "href": `/auth/oauth2client-${client.service_name}`,
-              "id": `oauth2client-${client.service_name}`
-            },
-            "children": `${capitalize(client.service_name)} login`,
-          }
-        ]
+        'component': 'li',
+        children: [{
+          'component': 'a',
+          'props': {
+            'href': `/auth/oauth2client-${client.service_name}`,
+            'id': `oauth2client-${client.service_name}`,
+          },
+          'children': `${capitalize(client.service_name)} login`,
+        }, ],
       };
     });
   } else {
-    clients = [
-      {
-        "component": "li",
-        children: [
-          {
-            "component": "a",
-            "props": {
-              "href": `#`,
-              "id": `oauth2client-NOAUTH2CLIENTS`
-            },
-            "children": `No OAuth2 Clients`,
-          }
-        ]
-      }
-    ];
+    clients = [{
+      'component': 'li',
+      children: [{
+        'component': 'a',
+        'props': {
+          'href': '#',
+          'id': 'oauth2client-NOAUTH2CLIENTS',
+        },
+        'children': 'No OAuth2 Clients',
+      }, ],
+    }, ];
   }
   // console.log({ clients });
   return {
     'containers': {
-      [`${reactadmin.manifest_prefix}/extension/oauth2clients`]: {
+      [`${reactadmin.manifest_prefix}extension/oauth2clients`]: {
         'layout': {
           component: 'Hero',
           props: {
@@ -58,29 +52,25 @@ module.exports = (periodic) => {
             },
           },
           // props: { size: 'isFullheight', },
-          children: [ {
+          children: [{
             component: 'HeroBody',
             props: {},
-            children: [
-              {
-                component: 'Container',
-                props: {},
-                children: [
-                  {
-                    component: 'Title',
-                    children: 'OAuth2 Logins',
-                    
-                  },
-                  {
-                    component: 'ul',
-                    children: clients,
-                  },
-                
-                ],
-              },
-            ],
-          },
-          ],
+            children: [{
+              component: 'Container',
+              props: {},
+              children: [{
+                  component: 'Title',
+                  children: 'OAuth2 Logins',
+
+                },
+                {
+                  component: 'ul',
+                  children: clients,
+                },
+
+              ],
+            }, ],
+          }, ],
         },
         // 'resources':{
         //   // 'tabledata':'/r-admin/contentdata/users?format=json&limit=10',
