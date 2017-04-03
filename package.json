@@ -44,8 +44,8 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "cf87aa01d6a18c12693a5a8b92cee209b951e6ba",
-    "tarball": "https://registry.npmjs.org/periodicjs.ext.oauth2client/-/periodicjs.ext.oauth2client-1.4.1.tgz"
+    "shasum": "d8020072246ab32921ca006c742937cf046ba774",
+    "tarball": "https://registry.npmjs.org/periodicjs.ext.oauth2client/-/periodicjs.ext.oauth2client-2.0.0.tgz"
   },
   "engines": {
     "node": ">=4.2.x"
@@ -82,5 +82,5 @@
     "postuninstall": "node uninstall.js",
     "test": "mocha"
   },
-  "version": "2.0.1"
+  "version": "3.0.0"
 }
