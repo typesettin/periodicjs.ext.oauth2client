@@ -2,11 +2,6 @@
 	"periodicCompatibility": "9.0.0",
   "periodicDependencies": [
     {
-      "extname": "periodicjs.ext.reactadmin",
-      "optional": true,
-      "version": "1.0.0"
-    },
-    {
       "extname":"periodicjs.ext.login",
       "version":"~7.0.3"
     }
