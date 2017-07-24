@@ -1,86 +1,60 @@
 {
-  "authors": [{
-      "email": "yaw.etse@gmail.com",
-      "name": "Yaw Joseph Etse",
-      "url": "http://about.me/yawjosephetse"
-    },
-    {
-      "email": "jan@promisefin.com",
-      "name": "Jan Bialostok",
-      "url": "https://github.com/janbialostok"
+  "name": "periodicjs.ext.oauth2client",
+  "description": "sample extension.",
+  "version": "0.0.1",
+  "main": "index.js",
+  "engines": {
+    "node": "^6.x"
+  },
+  "contributors": [],
+  "repository": {},
+  "config": {
+    "blanket": {
+      "pattern": [
+        "content/themes"
+      ]
     }
-  ],
-  "bugs": {
-    "url": "https://github.com/typesettin/periodicjs.ext.oauth2client/issues"
   },
-  "dependencies": {
-    "passport-oauth2": "^1.2.0"
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha -R spec --recursive",
+    "postinstall": "cd ../../ && periodicjs aex periodicjs.ext.oauth2client",
+    "postuninstall": "cd ../../ && periodicjs rex periodicjs.ext.oauth2client"
   },
-  "description": "An authentication extension for periodicjs that uses passport to authenticate user sessions.",
+  "dependencies": {},
   "devDependencies": {
-    "browserify": "^10.2.4",
+    "browserify": "^13.0.0",
     "chai": "^3.0.0",
-    "classie": "^1.0.0",
-    "formie": "^1.0.1",
-    "grunt": ">=0.4.5",
-    "grunt-browserify": ">=2.1.3",
-    "grunt-contrib-copy": ">=0.5.0",
-    "grunt-contrib-cssmin": ">=0.9.0",
-    "grunt-contrib-jshint": ">=0.10.0",
-    "grunt-contrib-less": ">=0.11.3",
-    "grunt-contrib-uglify": ">=0.4.0",
-    "grunt-contrib-watch": ">=0.6.1",
-    "grunt-jsbeautifier": ">=0.2.7",
-    "grunt-jsdoc": ">=0.5.6",
-    "grunt-newer": ">=0.7.0",
-    "grunt-simple-mocha": ">=0.4.0",
-    "jquery": "^2.1.3",
-    "js-dom": "0.0.1",
+    "chai-as-promised": "^6.0.0",
+    "coveralls": "^2.11.9",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-coveralls": "^1.0.1",
+    "grunt-jsbeautifier": "~0.2.7",
+    "grunt-jsdoc": "^2.0.0",
+    "grunt-mocha-cov": "^0.4.0",
+    "grunt-mocha-istanbul": "^4.0.2",
+    "grunt-newer": "^1.1.1",
+    "grunt-simple-mocha": "^0.4.1",
+    "istanbul": "^0.4.3",
     "jsdoc": "^3.3.2",
     "mocha": "^2.2.5",
-    "supertest": "^1.0.1",
-    "uglify-js": "^2.4.15",
-    "uglifyify": "^3.0.1"
+    "periodicjs": "10.0.53",
+    "node-mocks-http": "^1.6.2",
+    "mocha-lcov-reporter": "^1.2.0",
+    "mocha-sinon": "^2.0.0",
+    "semver": "^5.3.0",
+    "sinon": "^1.17.4",
+    "sinon-chai": "^2.8.0"
   },
+  "keywords": [],
+  "bugs": {},
+  "maintainers": [],
   "directories": {},
-  "dist": {
-    "shasum": "d8020072246ab32921ca006c742937cf046ba774",
-    "tarball": "https://registry.npmjs.org/periodicjs.ext.oauth2client/-/periodicjs.ext.oauth2client-2.0.0.tgz"
-  },
-  "engines": {
-    "node": ">=4.2.x"
-  },
-  "gitHead": "fc6076a3d1dd39e5061aaf9d64fb4250b5df05cf",
-  "homepage": "https://github.com/typesettin/periodicjs.ext.oauth2client",
-  "keywords": [
-    "authentication",
-    "oauth2",
-    "passport",
-    "periodicjs",
-    "cms",
-    "wordpress"
-  ],
-  "main": "index.js",
-  "maintainers": [{
-      "name": "janbialostok",
-      "email": "janbialostok@gmail.com"
-    },
-    {
-      "name": "yawetse",
-      "email": "yaw.etse@gmail.com"
-    }
-  ],
-  "name": "periodicjs.ext.oauth2client",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/typesettin/periodicjs.ext.oauth2client.git"
-  },
-  "scripts": {
-    "postinstall": "node install.js",
-    "postuninstall": "node uninstall.js",
-    "test": "mocha"
-  },
-  "version": "3.0.1"
+  "optionalDependencies": {}
 }
