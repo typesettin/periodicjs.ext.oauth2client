@@ -1,6 +1,6 @@
 # periodicjs.ext.oauth2client [![Coverage Status](https://coveralls.io/repos/github/githubUserOrgName/periodicjs.ext.oauth2client/badge.svg?branch=master)](https://coveralls.io/github/githubUserOrgName/periodicjs.ext.oauth2client?branch=master) [![Build Status](https://travis-ci.org/githubUserOrgName/periodicjs.ext.oauth2client.svg?branch=master)](https://travis-ci.org/githubUserOrgName/periodicjs.ext.oauth2client)
 
-A simple extension.
+An extension that connects to an OAuth 2 Server using passport-oauth2 and saves the access token to the user's extension attributes
 
 [API Documentation](https://github.com/githubUserOrgName/periodicjs.ext.oauth2client/blob/master/doc/api.md)
 

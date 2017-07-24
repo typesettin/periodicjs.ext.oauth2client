@@ -1,13 +1,21 @@
 {
   "name": "periodicjs.ext.oauth2client",
-  "description": "sample extension.",
-  "version": "0.0.1",
+  "description": "An authentication extension for periodicjs that uses passport to authenticate user sessions.",
+  "version": "4.0.0",
   "main": "index.js",
   "engines": {
     "node": "^6.x"
   },
+  "author": {
+    "email": "yaw.etse@gmail.com",
+    "name": "Yaw Joseph Etse",
+    "url": "http://about.me/yawjosephetse"
+  },
   "contributors": [],
-  "repository": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/typesettin/periodicjs.ext.oauth2client.git"
+  },
   "config": {
     "blanket": {
       "pattern": [
@@ -21,7 +29,9 @@
     "postinstall": "cd ../../ && periodicjs aex periodicjs.ext.oauth2client",
     "postuninstall": "cd ../../ && periodicjs rex periodicjs.ext.oauth2client"
   },
-  "dependencies": {},
+  "dependencies": {
+    "passport-oauth2": "^1.4.0"
+  },
   "devDependencies": {
     "browserify": "^13.0.0",
     "chai": "^3.0.0",
@@ -52,9 +62,24 @@
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0"
   },
-  "keywords": [],
-  "bugs": {},
-  "maintainers": [],
+  "keywords": [
+    "authentication",
+    "oauth2",
+    "passport",
+    "periodicjs"
+  ],
+  "bugs": {
+    "url": "https://github.com/typesettin/periodicjs.ext.oauth2client/issues"
+  },
+  "maintainers": [{
+      "name": "janbialostok",
+      "email": "janbialostok@gmail.com"
+    },
+    {
+      "name": "yawetse",
+      "email": "yaw.etse@gmail.com"
+    }
+  ],
   "directories": {},
   "optionalDependencies": {}
 }
