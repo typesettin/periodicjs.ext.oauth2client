@@ -1,3 +1,6 @@
 'use strict';
+const oauth = require('./oauth');
 
-module.exports = {};
+module.exports = {
+  oauth,
+};

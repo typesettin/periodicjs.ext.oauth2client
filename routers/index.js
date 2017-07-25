@@ -2,13 +2,8 @@
 
 const periodic = require('periodicjs');
 const extensionRouter = periodic.express.Router();
-const fs = require('fs-extra');
-const path = require('path');
-const packageJson = fs.readJsonSync(path.join(__dirname, '../package.json'));
-const preTransforms = periodic.utilities.middleware.preTransforms(periodic);
+const authRouter = require('./auth');
 
-extensionRouter.all(packageJson.name, preTransforms, (req, res) => {
-  res.send(`EXTENSION ${packageJson.name}`);
-});
+extensionRouter.use('/auth', authRouter);
 
 module.exports = extensionRouter;
