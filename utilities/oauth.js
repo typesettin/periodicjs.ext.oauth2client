@@ -13,7 +13,7 @@ const authenticateUser = periodic.locals.extensions.get('periodicjs.ext.passport
  */
 function oauth2callback(options) {
   return function(req, res, next) {
-    const { service_name } = options;
+    const { service_name, } = options;
     // console.log('req.body',req.body)
     // console.log('req.query',req.query)
     // console.log('req.headers',req.headers)
@@ -30,10 +30,10 @@ function oauth2callback(options) {
     passport.authenticate(`oauth2client-${service_name}`, {
       successRedirect: loginUrl,
       failureRedirect: loginFailureUrl,
-      failureFlash: `Invalid ${service_name} authentication credentials username or password.`
+      failureFlash: `Invalid ${service_name} authentication credentials username or password.`,
     })(req, res, next);
   };
-};
+}
 
 
 /**
@@ -43,7 +43,7 @@ function oauth2callback(options) {
  */
 function user_auth_request(options) {
   return function(req, res, next) {
-    const { client } = options;
+    const { client, } = options;
     const service_name = client.service_name;
     req.controllerData = req.controllerData || {};
     if (!client.user_email) {
@@ -58,7 +58,7 @@ function user_auth_request(options) {
       var UserModelToQuery,
         userModelToUse = client.user_entity_type || 'user';
       UserModelToQuery = mongoose.model(capitalize(userModelToUse));
-      UserModelToQuery.findOne({ email: client.user_email }, function(err, user) {
+      UserModelToQuery.findOne({ email: client.user_email, }, function(err, user) {
         selectedUserAuthToken[service_name] = user;
         if (user) {
           req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[service_name].attributes[`oauth2client_${service_name}`].accesstoken;
@@ -67,7 +67,7 @@ function user_auth_request(options) {
       });
     }
   };
-};
+}
 
 
 /**
@@ -76,8 +76,8 @@ function user_auth_request(options) {
  * @return {Function} returns the express middleware for the oauth callback
  */
 function client_auth_request(options) {
+  const { client, } = options;
   return function(req, res, next) {
-    const { client } = options;
     if (!clientAuthToken[client.service_name]) {
       clientAuthToken[client.service_name] = new Buffer(client.client_token_id + ':' + client.client_secret).toString('base64');
     }
@@ -85,22 +85,22 @@ function client_auth_request(options) {
     req.controllerData.authorization_header = 'Basic ' + clientAuthToken[client.service_name];
     next();
   };
-};
+}
 
 function get_auth_tokens() {
   return {
     users: selectedUserAuthToken,
-    clients: clientAuthToken
+    clients: clientAuthToken,
   };
-};
+}
 
 function getProfileFromAccessToken(options) {
-  const { accessToken } = options;
+  const { accessToken, } = options;
   return {
     email: accessToken.user_email,
     username: accessToken.user_username,
     id: accessToken.user_id,
-    _id: accessToken.user_id
+    _id: accessToken.user_id,
   };
 }
 
@@ -110,7 +110,7 @@ function oauthLoginVerifyCallback(req, accessToken, refreshToken, profile, done)
   logger.silly('oauth2client refreshToken:', refreshToken);
   logger.silly('oauth2client profile:', profile);
 
-  const oauth2clientdata = (profile && typeof profile === 'object' && Object.keys(profile).length) ? profile : getProfileFromAccessToken({ accessToken });
+  const oauth2clientdata = (profile && typeof profile === 'object' && Object.keys(profile).length) ? profile : getProfileFromAccessToken({ accessToken, });
   const accessTokenToSave = (typeof accessToken === 'string') ? accessToken : accessToken.value;
   // console.log('oauth2clientdata',oauth2clientdata);
   // console.log('accessTokenToSave',accessTokenToSave);
@@ -124,14 +124,15 @@ function oauthLoginVerifyCallback(req, accessToken, refreshToken, profile, done)
       accesstoken: accessTokenToSave,
       refreshtoken: refreshToken,
       accesstokenupdated: new Date(),
-    }
+    },
   };
   const exitinguserquery = {
     $or: [
-      { email: oauth2clientdata.email },
+      { email: oauth2clientdata.email, },
       {
-        [`oauth2client_${oauth2client_settings.service_name}.user_id`]: oauth2clientdata.id },
-    ]
+        [`oauth2client_${oauth2client_settings.service_name}.user_id`]: oauth2clientdata.id,
+      },
+    ],
   };
 
   authenticateUser({
@@ -149,7 +150,7 @@ function oauthLoginVerifyCallback(req, accessToken, refreshToken, profile, done)
       linkSocialAccount({
         donecallback: done,
         linkaccountservice: `oauth2client-${oauth2client_settings.service_name}`,
-        requestobj: { user: oauth2clientdata },
+        requestobj: { user: oauth2clientdata, },
         findsocialaccountquery: findsocialaccountquery,
         socialaccountattributes: socialaccountattributes,
         newaccountdata: {
@@ -157,10 +158,10 @@ function oauthLoginVerifyCallback(req, accessToken, refreshToken, profile, done)
           username: oauth2clientdata.username,
           activated: true,
           accounttype: 'social-sign-in',
-        }
+        },
       });
     },
-    donecallback: done
+    donecallback: done,
   });
 }
 
