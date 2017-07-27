@@ -28,7 +28,7 @@ module.exports = () => {
           callbackURL: oauth2client_settings.callback_url || `/auth/oauth2client-${oauth2client_settings.service_name}/callback`,
           authorizationURL: oauth2client_settings.authorization_url,
           tokenURL: oauth2client_settings.token_url,
-        }, utilities.oauth.oauthLoginVerifyCallback));
+        }, utilities.oauth.oauthLoginVerifyCallback({ oauth2client_settings, })));
         oauth2clientExtConfig.periodic_config.periodicjs_ext_admin['OAuth2 Logins'].push({
           link: `/auth/oauth2client-${oauth2client_settings.service_name}`,
           title: `${capitalize(oauth2client_settings.service_name)} login`,
