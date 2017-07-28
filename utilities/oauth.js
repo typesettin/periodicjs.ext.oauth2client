@@ -45,25 +45,31 @@ function user_auth_request(options) {
     const { client, } = options;
     const service_name = client.service_name;
     req.controllerData = req.controllerData || {};
+    // console.log('user_auth_request', { selectedUserAuthToken, client });
     if (!client.user_email) {
       next();
     } else if (selectedUserAuthToken[service_name] &&
-      selectedUserAuthToken[service_name].attributes &&
-      selectedUserAuthToken[service_name].attributes[`oauth2client_${service_name}`] &&
-      selectedUserAuthToken[service_name].attributes[`oauth2client_${service_name}`].accesstoken) {
-      req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[service_name].attributes[`oauth2client_${service_name}`].accesstoken;
+      selectedUserAuthToken[service_name].extensionattributes &&
+      selectedUserAuthToken[service_name].extensionattributes.passport[`oauth2client_${service_name}`] &&
+      selectedUserAuthToken[service_name].extensionattributes.passport[`oauth2client_${service_name}`].accesstoken) {
+      req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[service_name].extensionattributes.passport[`oauth2client_${service_name}`].accesstoken;
       next();
     } else {
-      var UserModelToQuery,
-        userModelToUse = client.user_entity_type || 'user';
-      UserModelToQuery = mongoose.model(capitalize(userModelToUse));
-      UserModelToQuery.findOne({ email: client.user_email, }, function(err, user) {
-        selectedUserAuthToken[service_name] = user;
-        if (user) {
-          req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[service_name].attributes[`oauth2client_${service_name}`].accesstoken;
-        }
-        next();
-      });
+      const coreDataModel = passportLocals.auth.getAuthCoreDataModel({ entitytype: client.user_entity_type });
+
+      coreDataModel.load({
+          query: { email: client.user_email, },
+        })
+        .then(user => {
+          // console.log({ user });
+          selectedUserAuthToken[service_name] = user;
+          if (user) {
+            req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[service_name].extensionattributes.passport[`oauth2client_${service_name}`].accesstoken;
+          }
+          // console.log('req.controllerData.authorization_header', req.controllerData.authorization_header);
+          next();
+        })
+        .catch(next);
     }
   };
 }
@@ -87,6 +93,7 @@ function client_auth_request(options) {
 }
 
 function get_auth_tokens() {
+  // console.log('get_auth_tokens', { selectedUserAuthToken });
   return {
     users: selectedUserAuthToken,
     clients: clientAuthToken,
