@@ -7,6 +7,7 @@ const passportExtSettings = periodic.settings.extensions['periodicjs.ext.passpor
 const passportLocals = periodic.locals.extensions.get('periodicjs.ext.passport');
 const passport = passportLocals.passport;
 const authenticateUser = passportLocals.auth.authenticateUser;
+const linkSocialAccount = passportLocals.auth.linkSocialAccount;
 
 /**
  * oauth callback
@@ -25,7 +26,8 @@ function oauth2callback(options) {
     const loginFailureUrl = (req.session.return_url) ?
       req.session.return_url :
       loginEntityURL + '?return_url=' + req.session.return_url;
-    // console.log({ entitytype, redirectURL, loginEntityURL, loginUrl, loginFailureUrl }, 'req.session', req.session, 'req.user', req.user);
+    // console.log({ loginUrl, loginFailureUrl, redirectURL, loginEntityURL, });
+    // console.log({ entitytype, redirectURL, loginEntityURL, loginUrl, loginFailureUrl }, 'req.session', req.session, 'req.user', req.user,'req.headers', req.headers,{service_name});
     passport.authenticate(`oauth2client-${service_name}`, {
       successRedirect: loginUrl,
       failureRedirect: loginFailureUrl,
@@ -55,11 +57,11 @@ function user_auth_request(options) {
       req.controllerData.authorization_header = 'Bearer ' + selectedUserAuthToken[service_name].extensionattributes.passport[`oauth2client_${service_name}`].accesstoken;
       next();
     } else {
-      const coreDataModel = passportLocals.auth.getAuthCoreDataModel({ entitytype: client.user_entity_type });
+      const coreDataModel = passportLocals.auth.getAuthCoreDataModel({ entitytype: client.user_entity_type, });
 
       coreDataModel.load({
-          query: { email: client.user_email, },
-        })
+        query: { email: client.user_email, },
+      })
         .then(user => {
           // console.log({ user });
           selectedUserAuthToken[service_name] = user;
@@ -121,16 +123,16 @@ function oauthLoginVerifyCallback(options) {
 
     const oauth2clientdata = (profile && typeof profile === 'object' && Object.keys(profile).length) ? profile : getProfileFromAccessToken({ accessToken, });
     const accessTokenToSave = (typeof accessToken === 'string') ? accessToken : accessToken.value;
-    // console.log('oauth2clientdata', oauth2clientdata);
-    // console.log('accessTokenToSave', accessTokenToSave);
+    logger.silly('oauth2clientdata', oauth2clientdata);
+    logger.silly('accessTokenToSave', accessTokenToSave);
     const findsocialaccountquery = {
-      [`attributes.oauth2client_${oauth2client_settings.service_name}.user_id`]: oauth2clientdata.id,
+      [`attributes.oauth2client_${oauth2client_settings.service_name}.user_id`]: oauth2clientdata.id || req.user._id,
     };
     const socialaccountattributes = {
       [`oauth2client_${oauth2client_settings.service_name}`]: {
-        user_id: oauth2clientdata.id,
-        username: oauth2clientdata.username,
-        entitytype: oauth2clientdata.entitytype,
+        user_id: oauth2clientdata.id || req.user._id,
+        username: oauth2clientdata.username || req.user.name,
+        entitytype: oauth2clientdata.entitytype || req.user.entitytype,
         accesstoken: accessTokenToSave,
         refreshtoken: refreshToken,
         accesstokenupdated: new Date(),
@@ -138,13 +140,13 @@ function oauthLoginVerifyCallback(options) {
     };
     const existingUserQuery = {
       $or: [
-        { email: oauth2clientdata.email, },
+        { email: oauth2clientdata.email || req.user.email, },
         {
-          [`oauth2client_${oauth2client_settings.service_name}.user_id`]: oauth2clientdata.id,
+          [`extensionattributes.passport.oauth2client_${oauth2client_settings.service_name}.user_id`]: oauth2clientdata.id || req.user._id,
         },
       ],
     };
-    req.query.entitytype = oauth2clientdata.entitytype;
+    req.query.entitytype = oauth2clientdata.entitytype || req.user.entitytype;
     authenticateUser({
       req,
       existingUserQuery,
@@ -154,25 +156,28 @@ function oauthLoginVerifyCallback(options) {
         existingUser.extensionattributes = existingUser.extensionattributes || {};
         existingUser.extensionattributes.passport = Object.assign({}, existingUser.extensionattributes.passport, socialaccountattributes);
         coreDataModel.update({
-            depopulate: false,
-            updatedoc: existingUser,
-          })
+          depopulate: false,
+          updatedoc: existingUser,
+        })
           .then(updatedUser => {
             // console.log({ updatedUser });
-            return done(null, updatedUser);
+            return done(null, (updatedUser && updatedUser._id)
+              ? updatedUser
+              : existingUser);
           })
           .catch(done);
       },
-      nonusercallback: function() {
+      noUserCallback: function() {
         linkSocialAccount({
+          req,
           donecallback: done,
-          linkaccountservice: `oauth2client-${oauth2client_settings.service_name}`,
+          linkAccountService: `oauth2client-${oauth2client_settings.service_name}`,
           requestobj: { user: oauth2clientdata, },
-          findsocialaccountquery: findsocialaccountquery,
-          socialaccountattributes: socialaccountattributes,
-          newaccountdata: {
-            email: oauth2clientdata.username + `@oauth2client-${oauth2client_settings.service_name}.account.com`,
-            username: oauth2clientdata.username,
+          findSocialAccountQuery: findsocialaccountquery,
+          linkAccountAttributes: socialaccountattributes,
+          newAccountData: {
+            email: oauth2clientdata.username||req.user.name||req.user.email + `@oauth2client-${oauth2client_settings.service_name}.account.com`,
+            username: oauth2clientdata.username||req.user.name||req.user.email,
             activated: true,
             accounttype: 'social-sign-in',
           },
