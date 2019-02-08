@@ -7,6 +7,7 @@ const passportExtSettings = periodic.settings.extensions['periodicjs.ext.passpor
 const passportExtOAuth2Clients = passportExtSettings.oauth.oauth2client;
 const utilities = require('./utilities');
 const oauth2clientExtConfig = periodic.extensions.get('periodicjs.ext.oauth2client');
+const logger = periodic.logger;
 
 module.exports = () => {
   return new Promise((resolve, reject) => {
@@ -35,6 +36,16 @@ module.exports = () => {
         });
       });
       // console.log({ oauth2clientExtConfig });
+
+      periodic.status.on('configuration-complete', () => {
+        const clients = periodic.settings.extensions[ 'periodicjs.ext.passport' ].oauth.oauth2client;
+        utilities.oauth.create_client_auth_headers({ clients })
+          .then(() => {
+            logger.silly('initialized client auth headers');
+          })
+          .catch(logger.error);
+      });
+
       resolve(true);
     } catch (e) {
       reject(e);

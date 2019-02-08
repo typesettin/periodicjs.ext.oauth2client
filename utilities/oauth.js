@@ -8,6 +8,7 @@ const passportLocals = periodic.locals.extensions.get('periodicjs.ext.passport')
 const passport = passportLocals.passport;
 const authenticateUser = passportLocals.auth.authenticateUser;
 const linkSocialAccount = passportLocals.auth.linkSocialAccount;
+const clientAuthHeaders = {};
 
 /**
  * oauth callback
@@ -76,6 +77,13 @@ function user_auth_request(options) {
   };
 }
 
+async function create_client_auth_headers({ clients }) {
+  clients.forEach(client => {
+    const token = new Buffer(client.client_token_id + ':' + client.client_secret).toString('base64');
+    clientAuthHeaders[ client.service_name ] = `Basic ${token}`;
+  });
+  return clientAuthHeaders;
+}
 
 /**
  * set controller data auth header, for making authenticated API requests later
@@ -190,6 +198,7 @@ function oauthLoginVerifyCallback(options) {
 
 
 module.exports = {
+  create_client_auth_headers,
   selectedUserAuthToken,
   clientAuthToken,
   oauth2callback,
@@ -198,4 +207,5 @@ module.exports = {
   get_auth_tokens,
   getProfileFromAccessToken,
   oauthLoginVerifyCallback,
+  clientAuthHeaders,
 };
